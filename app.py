@@ -42,7 +42,7 @@ email_data = emails[emails["customer"] == customer]
 slack_data = slack[slack["customer"] == customer]
 usage_data = usage[usage["customer"] == customer]
 
-st.subheader("📊 Customer Overview")
+
 
 
 # Customer Info
@@ -211,7 +211,24 @@ Return Markdown with exactly these sections:
 
 # 🎯 Next Best Action
 """
+# ----------------------------------
+# AI Model
+# ----------------------------------
 
+llm = ChatGroq(
+    model="llama-3.1-8b-instant",
+    api_key=st.secrets["GROQ_API_KEY"]
+)
+
+with st.spinner("Analyzing customer..."):
+    response = llm.invoke(prompt).content
+
+st.divider()
+
+st.subheader("🤖 AI Customer Analysis")
+
+with st.container(border=True):
+    st.markdown(response)
 
 
 left, right = st.columns(2)
@@ -297,5 +314,5 @@ Provide a concise and professional answer.
 st.divider()
 
 st.caption(
-    "Built for the Volopay Growth Squad Assessment • Streamlit • Ollama • LangChain"
+    "Built for the Volopay Growth Squad Assessment • Streamlit • Groq • LangChain"
 )
