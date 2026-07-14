@@ -188,19 +188,20 @@ Product Usage:
 prompt = f"""
 You are a Senior Customer Success Manager.
 
-Analyze the customer information below.
+Analyze ONLY the customer information provided below.
 
 Rules:
-- Use ONLY the provided customer information.
-- Do not invent facts.
+- Use ONLY the provided information.
+- Do NOT assume or invent facts.
+- If information is missing, say it is unavailable.
 - Treat Slack notes as internal team notes.
-- Keep the response concise and practical.
+- If product usage is healthy, do not describe it as low usage.
 
 Customer Information:
 
 {context}
 
-Return in Markdown using these headings:
+Return Markdown with exactly these sections:
 
 # 📋 Customer Summary
 
@@ -248,26 +249,6 @@ with right:
         )
 
 # ----------------------------------
-# AI Analysis
-# ----------------------------------
-
-llm = ChatGroq(
-    model="llama-3.1-8b-instant",
-    api_key=st.secrets["GROQ_API_KEY"]
-)
-
-with st.spinner("Analyzing customer..."):
-    response = llm.invoke(prompt).content
-
-st.divider()
-
-st.subheader("🤖 AI Customer Analysis")
-
-with st.container(border=True):
-    st.markdown(response)
-
-
-# ----------------------------------
 # AI Chat Assistant
 # ----------------------------------
 
@@ -284,6 +265,15 @@ if question:
     chat_prompt = f"""
 You are a Customer Success AI Assistant.
 
+Use ONLY the customer information below.
+
+Rules:
+- Never invent facts.
+- Never assume customer sentiment or churn.
+- Do not infer inactivity unless explicitly stated.
+- If information is unavailable, say "Not available in the provided customer data."
+- Base every answer only on the supplied data.
+
 Customer Information:
 
 {context}
@@ -292,9 +282,7 @@ User Question:
 
 {question}
 
-Answer ONLY using the customer information above.
-If the answer is not available, say:
-'The requested information is not available in the customer data.'
+Provide a concise and professional answer.
 """
 
     with st.spinner("Thinking..."):
