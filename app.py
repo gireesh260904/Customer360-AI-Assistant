@@ -1,4 +1,4 @@
-from langchain_ollama import OllamaLLM
+from langchain_groq import ChatGroq
 import streamlit as st
 import pandas as pd
 
@@ -251,10 +251,13 @@ with right:
 # AI Analysis
 # ----------------------------------
 
-llm = OllamaLLM(model="qwen2.5:1.5b")
+llm = ChatGroq(
+    model="llama-3.1-8b-instant",
+    api_key=st.secrets["GROQ_API_KEY"]
+)
 
 with st.spinner("Analyzing customer..."):
-    response = llm.invoke(prompt)
+    response = llm.invoke(prompt).content
 
 st.divider()
 
@@ -295,7 +298,7 @@ If the answer is not available, say:
 """
 
     with st.spinner("Thinking..."):
-        answer = llm.invoke(chat_prompt)
+        answer = llm.invoke(chat_prompt).content
 
     with st.chat_message("user"):
         st.write(question)
