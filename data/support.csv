@@ -1,0 +1,5 @@
+customer,ticket,priority,status
+John,Invoice mismatch,High,Open
+John,Payment failed twice,Medium,Closed
+Alice,Login issue,Low,Closed
+David,Expense approval error,High,Open
